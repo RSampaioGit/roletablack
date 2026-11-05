@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roleta Black — Premiações gamificadas para empresas</title>
+<meta name="description" content="Sistema digital de roleta 100% personalizável para engajar, motivar e premiar equipes comerciais, funcionários e clientes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0806; --coal:#15110b; --panel:#1d1710; --line:#3a2d14;
+  --gold:#ffc72c; --gold-d:#d99a00; --gold-l:#ffe28a; --red:#d4141c; --white:#fff8ea; --mute:#c9bc9f;
+  --font:'Archivo','Helvetica Neue',Arial,sans-serif;
+  color-scheme:dark;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0}
+body{background:var(--ink);color:var(--white);font-family:var(--font);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg,canvas{max-width:100%}
+a{color:inherit}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-weight:850;line-height:1.02;margin:0;letter-spacing:-.01em}
+h1,h2{font-style:italic;font-stretch:90%}
+h1{font-size:clamp(2.5rem,6.4vw,4.9rem)}
+h2{font-size:clamp(1.9rem,4.4vw,3.2rem)}
+h3{font-size:1.15rem;line-height:1.2}
+.gold{background:linear-gradient(180deg,var(--gold-l),var(--gold) 45%,var(--gold-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+p{margin:0}
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.7rem;border-radius:999px;font-weight:800;text-decoration:none;font-size:1.02rem;border:2px solid transparent;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s}
+.btn-gold{background:linear-gradient(180deg,var(--gold-l),var(--gold) 50%,var(--gold-d));color:#1a1100;box-shadow:0 8px 28px -8px rgba(255,199,44,.55)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 32px -6px rgba(255,199,44,.7)}
+.btn-line{border-color:var(--gold-d);color:var(--gold)}
+.btn-line:hover{background:rgba(255,199,44,.1)}
+:focus-visible{outline:3px solid var(--gold-l);outline-offset:3px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:rgba(10,8,6,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{font-weight:900;font-style:italic;font-size:1.35rem;text-decoration:none;letter-spacing:.01em}
+nav{display:flex;gap:26px;align-items:center}
+nav a:not(.btn){text-decoration:none;color:var(--mute);font-weight:600;font-size:.95rem}
+nav a:not(.btn):hover{color:var(--gold)}
+nav .btn{padding:.6rem 1.2rem;font-size:.92rem}
+@media(max-width:800px){nav a:not(.btn){display:none}}
+
+/* hero */
+.hero{position:relative;padding:64px 0 88px;background:radial-gradient(900px 520px at 78% 40%,rgba(255,199,44,.16),transparent 65%),radial-gradient(600px 400px at 0% 0%,rgba(212,20,28,.14),transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero p.lead{font-size:1.2rem;color:var(--mute);margin:24px 0 32px;max-width:34em}
+.hero p.lead strong{color:var(--white)}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px}
+.proof{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px 22px;color:var(--mute);font-size:.95rem;font-weight:600}
+.proof span::before{content:"✓";color:var(--gold);margin-right:8px;font-weight:900}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding-top:40px}}
+
+/* wheel demo */
+.demo{display:flex;flex-direction:column;align-items:center;gap:16px}
+.stage{position:relative;width:min(420px,100%);aspect-ratio:1}
+.rim{position:absolute;inset:0;border-radius:50%;padding:14px;background:conic-gradient(from 0deg,var(--gold-l),var(--gold-d),var(--gold),var(--gold-l),var(--gold-d),var(--gold-l));box-shadow:0 0 0 4px #000,0 24px 70px -10px rgba(255,199,44,.4)}
+.rim canvas{width:100%;height:100%;display:block;border-radius:50%;transition:transform 5.2s cubic-bezier(.12,.72,.08,1)}
+.bulbs{position:absolute;inset:3px;border-radius:50%;pointer-events:none}
+.bulbs i{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff3c4;box-shadow:0 0 8px 2px var(--gold);left:50%;top:50%;margin:-4.5px}
+.pointer{position:absolute;left:50%;top:-14px;width:44px;height:52px;margin-left:-22px;z-index:3;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6))}
+.hub{position:absolute;left:50%;top:50%;width:21%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#2b2112,#080604);border:5px solid var(--gold);display:grid;place-items:center;z-index:2}
+.hub svg{width:55%;fill:none;stroke:var(--gold);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+#result{min-height:3.2em;text-align:center;font-weight:700;color:var(--mute);max-width:420px}
+#result b{color:var(--gold);font-size:1.25rem;display:block}
+.cfg{width:min(420px,100%);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cfg summary{cursor:pointer;font-weight:700;color:var(--gold-l)}
+.cfg textarea{width:100%;margin-top:10px;min-height:120px;background:#0e0b07;color:var(--white);border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit;font-size:.95rem;resize:vertical}
+.cfg small{color:var(--mute);display:block;margin-top:6px}
+
+/* sections */
+section{padding:88px 0}
+.sec-head{max-width:760px;margin-bottom:48px}
+.sec-head p{color:var(--mute);margin-top:16px;font-size:1.1rem}
+.alt{background:var(--coal);border-block:1px solid var(--line)}
+.pains{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.pains article{padding:30px 26px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -1px -1px 0}
+.pains h3{color:var(--gold);margin-bottom:10px}
+.pains p{color:var(--mute);font-size:.98rem}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:s}
+.steps li{list-style:none;position:relative;padding-top:74px}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;top:0;left:0;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-style:italic;font-size:1.6rem;color:#1a1100;background:linear-gradient(180deg,var(--gold-l),var(--gold-d))}
+.steps li::after{content:"";position:absolute;top:28px;left:68px;right:-14px;border-top:2px dashed var(--line)}
+.steps li:last-child::after{display:none}
+.steps ol{display:contents}
+.steps p{color:var(--mute);margin-top:8px}
+@media(max-width:800px){.steps{grid-template-columns:1fr}.steps li::after{display:none}}
+
+.uses{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.use{background:linear-gradient(160deg,var(--panel),#100c07);border:1px solid var(--line);border-radius:22px;padding:30px}
+.use:first-child{border-color:var(--gold-d);box-shadow:inset 0 0 0 1px rgba(255,199,44,.25)}
+.use h3{font-size:1.4rem;margin-bottom:12px}
+.use ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:8px;color:var(--mute);font-size:.98rem}
+.use li{padding-left:22px;position:relative}
+.use li::before{content:"";position:absolute;left:0;top:.6em;width:9px;height:9px;border-radius:2px;background:var(--gold);transform:rotate(45deg)}
+
+.band{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px}
+.band div{border-left:3px solid var(--gold);padding-left:18px}
+.band h3{margin-bottom:6px}
+.band p{color:var(--mute);font-size:.96rem}
+
+details.faq{border-bottom:1px solid var(--line);padding:20px 0}
+details.faq summary{cursor:pointer;font-weight:750;font-size:1.1rem;list-style:none;display:flex;justify-content:space-between;gap:16px}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";color:var(--gold);font-size:1.6rem;line-height:1;transition:transform .2s}
+details.faq[open] summary::after{transform:rotate(45deg)}
+details.faq p{color:var(--mute);margin-top:12px;max-width:60em}
+
+.final{text-align:center;background:radial-gradient(700px 360px at 50% 0%,rgba(255,199,44,.2),transparent 70%),var(--coal);border-top:1px solid var(--line)}
+.final p{color:var(--mute);font-size:1.15rem;margin:18px auto 32px;max-width:36em}
+.final .cta-row{justify-content:center}
+footer{padding:36px 0 44px;border-top:1px solid var(--line);color:var(--mute);font-size:.92rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+footer a{color:var(--gold);font-weight:700;text-decoration:none}
+.wpp-float{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:30;padding:.85rem 1.3rem}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rim canvas{transition-duration:.01s}.btn{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="#topo">ROLETA <span class="gold">BLACK</span></a>
+    <nav aria-label="Principal">
+      <a href="#problemas">Problemas que resolve</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#usos">Aplicações</a>
+      <a href="#faq">Dúvidas</a>
+      <a class="btn btn-gold" href="https://wa.me/5521964461112" target="_blank" rel="noopener">Falar no WhatsApp</a>
+    </nav>
+  </div>
+</header>
+
+<main id="topo">
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Recompense quem <span class="gold">faz a diferença.</span></h1>
+      <p class="lead">A <strong>Roleta Black</strong> é o sistema de premiações gamificadas que transforma metas em conquistas. Você define os prêmios e as dinâmicas, e sua equipe passa a querer bater o próximo resultado.</p>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="https://wa.me/5521964461112?text=Ol%C3%A1!%20Quero%20conhecer%20a%20Roleta%20Black%20para%20minha%20empresa." target="_blank" rel="noopener">Quero a Roleta Black na minha empresa</a>
+        <a class="btn btn-line" href="#como-funciona">Ver como funciona</a>
+      </div>
+      <div class="proof"><span>100% personalizável</span><span>Para equipes e clientes</span><span>Pronta para sua campanha</span></div>
+    </div>
+    <div class="demo">
+      <div class="stage">
+        <svg class="pointer" viewBox="0 0 44 52" aria-hidden="true"><path d="M22 50 4 14C-2 4 8 0 22 0s24 4 18 14z" fill="#d4141c" stroke="#ffc72c" stroke-width="3"/></svg>
+        <div class="rim">
+          <canvas id="wheel" width="800" height="800" role="img" aria-label="Roleta de prêmios de demonstração"></canvas>
+          <div class="bulbs" id="bulbs" aria-hidden="true"></div>
+        </div>
+        <button class="hub" id="spin" type="button" aria-label="Girar a roleta">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="13" width="22" height="15"/><rect x="3" y="9" width="26" height="5"/><path d="M16 9v19M16 9c-2-6-9-6-8-2 .6 2.4 5 2 8 2zm0 0c2-6 9-6 8-2-.6 2.4-5 2-8 2z"/></svg>
+        </button>
+      </div>
+      <div id="result" aria-live="polite">Toque no presente central e teste a roleta.</div>
+      <details class="cfg">
+        <summary>Personalize os prêmios desta demonstração</summary>
+        <textarea id="prizes" aria-label="Prêmios, um por linha">Vale-compras R$ 100
+Folga no sábado
+Bônus de meta
+Almoço com a diretoria
+Fone Bluetooth
+Dia de home office
+Voucher de restaurante
+Brinde surpresa</textarea>
+        <small>Um prêmio por linha, de 2 a 12 campos. É assim que sua empresa monta a própria roleta.</small>
+      </details>
+    </div>
+  </div>
+</div>
+
+<section id="problemas">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Incentivo que ninguém lembra no dia seguinte custa caro.</h2>
+      <p>Campanhas comuns de premiação ficam previsíveis rápido. A Roleta Black traz suspense e festa para o momento de reconhecer.</p>
+    </div>
+    <div class="pains">
+      <article><h3>Equipe comercial desengajada</h3><p>Metas sem emoção viram obrigação. A roleta faz cada resultado valer uma chance de ganhar.</p></article>
+      <article><h3>Turnover alto</h3><p>Quem se sente visto e reconhecido pensa duas vezes antes de sair. Reconhecimento frequente retém talentos.</p></article>
+      <article><h3>Endomarketing sem criatividade</h3><p>Troque o mural e o e-mail de parabéns por uma dinâmica ao vivo que a equipe quer repetir.</p></article>
+      <article><h3>Metas de vendas travadas</h3><p>Ligue prêmios a metas parciais e crie um motivo novo para fechar mais, toda semana.</p></article>
+      <article><h3>Baixo retorno nas dinâmicas</h3><p>Você escolhe os prêmios e o valor de cada um, e mantém o custo da campanha sob controle.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Do zero à primeira rodada em três passos.</h2>
+    </div>
+    <ol class="steps" style="padding:0;margin:0">
+      <li><h3>Configure sua roleta</h3><p>Cadastre os campos com prêmios, metas ou dinâmicas do jeito que sua empresa quiser.</p></li>
+      <li><h3>Defina a regra do jogo</h3><p>Escolha quem ganha o direito de girar: bateu a meta, fechou a venda, completou o desafio.</p></li>
+      <li><h3>Gire e celebre</h3><p>O resultado sai na hora, na frente de todos. Reconhecimento público e animado.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="usos">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Uma roleta, vários objetivos.</h2>
+      <p>O mesmo sistema atende áreas e campanhas diferentes, porque cada campo é seu.</p>
+    </div>
+    <div class="uses">
+      <article class="use"><h3>Times comerciais</h3><p>Para diretores e gestores que precisam de energia no fechamento do mês.</p><ul><li>Prêmio por meta batida</li><li>Desafios semanais de vendas</li><li>Premiação em reuniões e convenções</li></ul></article>
+      <article class="use"><h3>RH e endomarketing</h3><p>Para quem cuida de cultura, retenção e clima.</p><ul><li>Reconhecimento de desempenho</li><li>Ações de datas e eventos internos</li><li>Programas de benefícios criativos</li></ul></article>
+      <article class="use"><h3>Agências e clientes</h3><p>Para donos de agências e marcas que querem engajar o público externo.</p><ul><li>Ativações em eventos e lojas</li><li>Campanhas de fidelização</li><li>Roleta personalizada por cliente</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head"><h2>Por que a Roleta Black funciona.</h2></div>
+    <div class="band">
+      <div><h3>Gamificação de verdade</h3><p>Suspense, sorte e recompensa mudam o clima de qualquer reunião.</p></div>
+      <div><h3>Prêmios personalizados</h3><p>Dinheiro, folga, brindes, experiências: você decide o que entra.</p></div>
+      <div><h3>Reconhecimento visível</h3><p>Quem conquista resultado é celebrado diante do time.</p></div>
+      <div><h3>Visual premium</h3><p>Preto e dourado com a sua marca em evidência em qualquer evento.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width:860px">
+    <div class="sec-head"><h2>Dúvidas frequentes.</h2></div>
+    <details class="faq"><summary>Posso colocar qualquer prêmio na roleta?</summary><p>Sim. Os campos são livres: prêmios físicos, bônus, folgas, experiências ou até desafios e dinâmicas para a equipe.</p></details>
+    <details class="faq"><summary>Funciona para clientes, e não só para funcionários?</summary><p>Funciona. Muitas empresas usam a roleta em campanhas de fidelização, ativações e eventos com o público externo.</p></details>
+    <details class="faq"><summary>Preciso de equipe técnica para usar?</summary><p>Não. A configuração é feita por você, de forma simples. Se precisar de ajuda, nosso time atende pelo WhatsApp.</p></details>
+    <details class="faq"><summary>Como contrato ou peço uma demonstração?</summary><p>Clique em qualquer botão desta página e fale direto com a gente pelo WhatsApp. Respondemos com valores e próximos passos.</p></details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Motivação que gera <span class="gold">resultados.</span></h2>
+    <p>Fale com o time da Roleta Black e veja como montar a roleta da sua empresa.</p>
+    <div class="cta-row">
+      <a class="btn btn-gold" href="https://wa.me/5521964461112?text=Ol%C3%A1!%20Quero%20conhecer%20a%20Roleta%20Black%20para%20minha%20empresa." target="_blank" rel="noopener">Chamar no WhatsApp</a>
+      <a class="btn btn-line" href="https://www.instagram.com/roleta.black/" target="_blank" rel="noopener">Ver o Instagram</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Roleta Black. Todos os direitos reservados.</span>
+    <span><a href="https://www.instagram.com/roleta.black/" target="_blank" rel="noopener">@roleta.black</a> · <a href="https://wa.me/5521964461112" target="_blank" rel="noopener">WhatsApp</a></span>
+  </div>
+</footer>
+
+<a class="btn btn-gold wpp-float" href="https://wa.me/5521964461112?text=Ol%C3%A1!%20Quero%20conhecer%20a%20Roleta%20Black." target="_blank" rel="noopener">Falar no WhatsApp</a>
+
+<script>
+(function(){
+  var cv=document.getElementById('wheel'),ctx=cv.getContext('2d'),S=cv.width,C=S/2;
+  var ta=document.getElementById('prizes'),res=document.getElementById('result'),btn=document.getElementById('spin');
+  var items=[],rot=0,busy=false;
+  function read(){
+    var l=ta.value.split('\n').map(function(s){return s.trim()}).filter(Boolean).slice(0,12);
+    if(l.length<2) l=['Prêmio 1','Prêmio 2'];
+    items=l;
+  }
+  function draw(){
+    var n=items.length,a=2*Math.PI/n;
+    ctx.clearRect(0,0,S,S);
+    for(var i=0;i<n;i++){
+      var s=-Math.PI/2+i*a;
+      ctx.beginPath();ctx.moveTo(C,C);ctx.arc(C,C,C,s,s+a);ctx.closePath();
+      ctx.fillStyle=(i%2===0)?'#c8121a':'#141009';ctx.fill();
+      ctx.strokeStyle='#ffc72c';ctx.lineWidth=4;ctx.stroke();
+      ctx.save();ctx.translate(C,C);ctx.rotate(s+a/2);
+      ctx.textAlign='right';ctx.textBaseline='middle';
+      ctx.fillStyle='#fff8ea';
+      var fs=n>8?30:36;ctx.font='800 '+fs+'px Archivo, Arial, sans-serif';
+      var t=items[i];if(t.length>20)t=t.slice(0,19)+'…';
+      ctx.fillText(t,C-70,0);ctx.restore();
+    }
+  }
+  function bulbs(){
+    var b=document.getElementById('bulbs'),h='',N=20;
+    for(var i=0;i<N;i++){var d=i*360/N;h+='<i style="transform:rotate('+d+'deg) translateY(-'+(b.offsetWidth/2-6)+'px)"></i>'}
+    b.innerHTML=h;
+  }
+  function spin(){
+    if(busy)return;busy=true;
+    res.textContent='Girando…';
+    var n=items.length,a=360/n;
+    var target=Math.floor(Math.random()*n);
+    var land=(360-(target*a+a/2)+(Math.random()-.5)*a*.7+360)%360;
+    var cur=rot%360;
+    rot=rot-cur+360*6+land;
+    cv.style.transform='rotate('+rot+'deg)';
+    var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(function(){
+      busy=false;
+      var idx=Math.floor(((360-(rot%360))%360)/a)%n;
+      res.innerHTML='Resultado:<b>'+esc(items[idx])+'</b>';
+    },reduce?50:5300);
+  }
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  ta.addEventListener('input',function(){if(busy)return;read();draw();res.textContent='Roleta atualizada. Gire para testar.'});
+  btn.addEventListener('click',spin);
+  read();draw();bulbs();window.addEventListener('resize',bulbs);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+})();
+</script>
+</body>
+</html>
